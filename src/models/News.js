@@ -12,18 +12,16 @@ const NewsSchema = new Schema({
   title: {
     type: String,
     required: true,
-
   },
   description: {
     type: String,
     required: true,
-
+    unique: true,
   },
   text: {
     type: String,
     required: true,
   },
-
 });
 
 const News = mongoose.model('news', NewsSchema);

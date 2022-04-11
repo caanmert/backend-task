@@ -1,21 +1,18 @@
-import express from 'express';
 import mongoose from 'mongoose';
+import Koa from 'koa';
 import 'dotenv/config';
+import bodyparser from 'koa-bodyparser';
+import newsRouter from './routes/news.js';
 
-const app = express();
-const port = process.env.PORT || 6000;
+const app = new Koa();
 
-app.use(express.json());
+app.use(bodyparser());
+app.use(newsRouter.routes());
 
-app.use('*', (req, res) => {
-  res.status(404).json({ status: false, message: 'Address not found' });
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`);
 });
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}!`);
-});
-
 const { connection, connect } = mongoose;
 const uri = process.env.DB_URL;
-connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, ignoreUndefined: true });
 connection.once('open', () => { console.log('Mongodb database connection established'); });
